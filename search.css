@@ -1,0 +1,54 @@
+import navbar from "./navbar.js"
+
+let navbar_div= document.getElementById("navbar_div");
+navbar_div.innerHTML=navbar();
+
+
+async function searchMovies(){
+    try{
+        let query= document.getElementById("query").value;
+        let response= await fetch(`https://www.omdbapi.com/?s=${query}&apikey=4b646874`);  
+
+        let data= await response.json();
+        appendMovies(data.Search)
+        // console.log(data.Search);
+    }
+    catch(error){
+        console.log(error)
+    }
+}
+
+
+let input_box= document.getElementById("query");
+
+input_box.addEventListener("input",function(){
+    searchMovies()
+})
+
+
+function appendMovies(movies){
+    let data_div=document.getElementById("movies");
+        data_div.innerHTML=""
+
+movies.forEach(function (element){
+    const {Title,Poster, Year}= element;
+
+    let div= document.createElement("div");
+
+    let p_name= document.createElement("p");
+    p_name.innerText=Title
+
+    let p_Year= document.createElement("p");
+    p_Year.innerText= Year
+
+    let image= document.createElement("img");
+    image.src= Poster;
+
+    div.append(image, p_name, p_Year);
+    data_div.append(div)
+
+
+})
+
+
+  }
